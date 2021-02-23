@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class Kiosk {
 
+
     private final int MAIN_CODE = 101;
     private final int SIDE_CODE = 201;
     private final int BEVERAGE_CODE = 301;
@@ -25,12 +26,14 @@ public class Kiosk {
     private int count;
     
 
+
     Kiosk() {
         sc = new Scanner(System.in);
         Temp = "Food.txt";
         Foods = new String[3];
         count = 1;
         FoodsCheck = new HashMap<Integer, Food>();
+
         Cart = new ArrayList<Map<Integer, Food>>();
         try {
             fr = new FileReader(Temp);
@@ -52,22 +55,39 @@ public class Kiosk {
                 e.printStackTrace();
             }
         }
+
+        Cart = new ArrayList<>();
+ 
         
 
     }
 
-    void menuPrint(int userChoice) {
+
+
+    // 상품 확인
+    void menuprint(int userChoice) {
+        List<Integer> TempCart = new ArrayList<Integer>();
+
         String num = ""+userChoice;
+        int C = 1;
         System.out.println("번호\t상품명\t가격");
         for (int i = 1; i <= FoodsCheck.size(); i++) {
             if (FoodsCheck.get(i).getCategory().equals(num)) {
-                System.out.printf("%s.\t%s\t%s원\n", i, FoodsCheck.get(i).getName(), FoodsCheck.get(i).getPrice());
+                System.out.printf("%s.\t%s\t%s원\n", C, FoodsCheck.get(i).getName(), FoodsCheck.get(i).getPrice());
+                C++;
+                TempCart.add(i);
             }
         }
+        System.out.println("상품을 선택해주세요   Ex) 2 ");
+        int Choice = sc.nextInt();
+        sc.nextLine();
+        cart_Add(TempCart.get(Choice - 1));
+        
+        
     }
 
     void clearScreen() {
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 50; i++) {
             System.out.println();
         }
     }
@@ -77,7 +97,7 @@ public class Kiosk {
         final int TOGO = 2;
         final int MANAGERLOGIN = 0;
         while (true) {
-            System.out.println("                     관리자모드 0");
+            System.out.println("                   [관리자모드 0]");
             System.out.println("******************************");
             System.out.println("******************************");
             System.out.println("***                        ***");
@@ -129,6 +149,27 @@ public class Kiosk {
         final int SIDE = 2;
         final int BEVERAGE = 3;
         final int BACK = 0;
+        
+        try {
+            fr = new FileReader(Temp);
+            br = new BufferedReader(fr);
+            String Data = null;
+            while ((Data = br.readLine()) != null) {
+                Foods = Data.split(",");
+                FoodsCheck.put(count, new Food(Foods[0], Foods[1], Foods[2]));
+                count++;
+            }
+
+        } catch (Exception e1) {
+            
+        }finally {
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         System.out.println("***               CATEGORY              ***");
         System.out.println("***                                     ***");
@@ -156,17 +197,20 @@ public class Kiosk {
         }
         case MAIN: {
             System.out.println("*****   메인메뉴   *****");
-                menuPrint(MAIN_CODE);
+
+            menuprint(MAIN_CODE);
         }
         case SIDE: {
             System.out.println("*****   사이드   *****");
 
-            menuPrint(SIDE_CODE);
+            menuprint(SIDE_CODE);
         }
         case BEVERAGE: {
             System.out.println("*****   음료   *****");
 
-            menuPrint(BEVERAGE_CODE);
+            menuprint(BEVERAGE_CODE);
+            break;
+        
         }
         }
 
@@ -184,9 +228,9 @@ public class Kiosk {
 
     }
 
-    void cart_Add() {
-        
 
+    void cart_Add(int Key) {
+        System.out.println(Key);
     }
 
     void cart_Check() {
