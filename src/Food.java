@@ -4,10 +4,6 @@ public class Food{
     private String name;
     private String price;
     
-    @Override
-    public String toString() {
-        return " 메뉴 : " + name + "  price : " + price + "원";
-    }
 
     private String category;
     
