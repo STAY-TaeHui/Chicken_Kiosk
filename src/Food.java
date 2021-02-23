@@ -1,5 +1,5 @@
 
-public class Food implements Foods{
+public class Food {
     String name;
     String price;
     String category;
