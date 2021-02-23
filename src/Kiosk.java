@@ -7,15 +7,16 @@ import java.util.Scanner;
 
 public class Kiosk {
 
+    private Food food;
     private Scanner sc;
-    private Map<Integer, Foods> FoodsCheck;
-    private List<Map<Integer, Foods>> Cart;
+    private Map<Integer, Food> FoodsCheck;
+    private List<Map<Integer, Food>> Cart;
     private int discount;
 
     Kiosk() {
         sc = new Scanner(System.in);
-        FoodsCheck = new HashMap<Integer, Foods>();
-        Cart = new ArrayList<Map<Integer, Foods>>();
+        FoodsCheck = new HashMap<Integer, Food>();
+        Cart = new ArrayList<Map<Integer, Food>>();
     }
 
     void clearScreen() {
@@ -58,10 +59,12 @@ public class Kiosk {
 
             switch (here_togo) {
             case HERE: {
+                clearScreen();
                 categoryChoice(here_togo);
                 break;
             }
             case TOGO: {
+                clearScreen();
                 categoryChoice(here_togo);
                 break;
             }
@@ -78,7 +81,6 @@ public class Kiosk {
         final int SIDE = 2;
         final int BEVERAGE = 3;
         final int BACK = 0;
-        clearScreen();
 
         System.out.println("***               CATEGORY              ***");
         System.out.println("***                                     ***");
@@ -101,15 +103,21 @@ public class Kiosk {
 
         switch (menu) {
         case BACK: {
+            clearScreen();
             return;
         }
         case MAIN: {
+            System.out.println("*****   메인메뉴   *****");
 //                menuPrint(101)
         }
         case SIDE: {
+            System.out.println("*****   사이드   *****");
+
 //            menuPrint(201)
         }
         case BEVERAGE: {
+            System.out.println("*****   음료   *****");
+
 //            menuPrint(301)
         }
         }
