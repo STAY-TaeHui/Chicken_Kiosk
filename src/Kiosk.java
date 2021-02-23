@@ -11,14 +11,21 @@ import java.util.Scanner;
 
 public class Kiosk {
 
-    Scanner sc;
-    Map<Integer, Food> FoodsCheck;
-    List<Map<Integer, Food>> Cart;
-    String Temp;
-    FileReader fr;
-    BufferedReader br;
-    String[] Foods;
-    int count;
+
+    private final int MAIN_CODE = 101;
+    private final int SIDE_CODE = 201;
+    private final int BEVERAGE_CODE = 301;
+    
+    private Scanner sc;
+    private Map<Integer, Food> FoodsCheck;
+    private List<Map<Integer, Food>> Cart;
+    private String Temp;
+    private FileReader fr;
+    private BufferedReader br;
+    private String Foods[];
+    private int count;
+    
+
 
     Kiosk() {
         sc = new Scanner(System.in);
@@ -26,15 +33,41 @@ public class Kiosk {
         Foods = new String[3];
         count = 1;
         FoodsCheck = new HashMap<Integer, Food>();
+
+        Cart = new ArrayList<Map<Integer, Food>>();
+        try {
+            fr = new FileReader(Temp);
+            br = new BufferedReader(fr);
+            String Data = null;
+            while ((Data = br.readLine()) != null) {
+                Foods = Data.split(",");
+                FoodsCheck.put(count, new Food(Foods[0], Foods[1], Foods[2]));
+                count++;
+            }
+
+        } catch (Exception e1) {
+            System.out.println(e1.getMessage());
+        }finally {
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         Cart = new ArrayList<>();
  
         
 
     }
 
+
+
     // 상품 확인
     void menuprint(int userChoice) {
         List<Integer> TempCart = new ArrayList<Integer>();
+
         String num = ""+userChoice;
         int C = 1;
         System.out.println("번호\t상품명\t가격");
@@ -69,7 +102,7 @@ public class Kiosk {
             System.out.println("******************************");
             System.out.println("***                        ***");
             System.out.println("***      CHICKEN KIOSK     ***");
-            System.out.println("***    1. 매장      2. 포장  ***");
+            System.out.println("***    1. 매장      2. 포장   ***");
             System.out.println("***                        ***");
             System.out.println("******************************");
             System.out.println("******************************");
@@ -103,6 +136,7 @@ public class Kiosk {
                 break;
             }
             case MANAGERLOGIN: {
+                break;
 
             }
             }
@@ -163,18 +197,20 @@ public class Kiosk {
         }
         case MAIN: {
             System.out.println("*****   메인메뉴   *****");
-            menuprint(101);
-            break;
+
+            menuprint(MAIN_CODE);
         }
         case SIDE: {
             System.out.println("*****   사이드   *****");
-            menuprint(201);
-            break;
+
+            menuprint(SIDE_CODE);
         }
         case BEVERAGE: {
             System.out.println("*****   음료   *****");
-            menuprint(301);
+
+            menuprint(BEVERAGE_CODE);
             break;
+        
         }
         }
 
@@ -191,6 +227,7 @@ public class Kiosk {
     void receipt() {
 
     }
+
 
     void cart_Add(int Key) {
         System.out.println(Key);
