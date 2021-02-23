@@ -115,7 +115,7 @@ public class Kiosk {
         final int SIDE = 2;
         final int BEVERAGE = 3;
         final int BACK = 0;
-        
+       // FoodsCheck.clear();
         try {
             fr = new FileReader(Temp);
             br = new BufferedReader(fr);
@@ -129,12 +129,12 @@ public class Kiosk {
         } catch (Exception e1) {
             
         }finally {
-            try {
-                br.close();
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                br.close();
+//                fr.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
 
         System.out.println("***               CATEGORY              ***");
