@@ -1,8 +1,8 @@
 
 public class Manager {
-    String id;
-    String password ;
-    boolean login;
+    private String id;
+    private String password ;
+    private boolean login;
     
     void totalSales() {
         
