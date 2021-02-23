@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Kiosk {
+public class Kiosk2 {
 
 
     private final int MAIN_CODE = 101;
@@ -18,7 +18,7 @@ public class Kiosk {
     
     private Scanner sc;
     private Map<Integer, Food> FoodsCheck;
-    private List<Food> Cart;
+    private List<Map<Integer, Food>> Cart;
     private String Temp;
     private FileReader fr;
     private BufferedReader br;
@@ -27,13 +27,38 @@ public class Kiosk {
     
 
 
-    Kiosk() {
+    Kiosk2() {
         sc = new Scanner(System.in);
         Temp = "Food.txt";
         Foods = new String[3];
         count = 1;
         FoodsCheck = new HashMap<Integer, Food>();
-        Cart = new ArrayList<Food>();     
+
+        Cart = new ArrayList<Map<Integer, Food>>();
+        try {
+            fr = new FileReader(Temp);
+            br = new BufferedReader(fr);
+            String Data = null;
+            while ((Data = br.readLine()) != null) {
+                Foods = Data.split(",");
+                FoodsCheck.put(count, new Food(Foods[0], Foods[1], Foods[2]));
+                count++;
+            }
+
+        } catch (Exception e1) {
+            System.out.println(e1.getMessage());
+        }finally {
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Cart = new ArrayList<>();
+ 
+        
 
     }
 
@@ -205,8 +230,6 @@ public class Kiosk {
 
 
     void cart_Add(int Key) {
-        Cart.add(FoodsCheck.get(Key));
-        System.out.println(Cart);
         
     }
 
