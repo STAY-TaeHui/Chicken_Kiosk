@@ -33,7 +33,7 @@ public class Kiosk {
         Temp = "Food.txt";
         Foods = new String[3];
         FoodsCheck = new HashMap<Integer, Food>();
-        Cart = new ArrayList<Food>();
+        Cart = new ArrayList<>();
     }
 
     // 상품 확인
@@ -205,12 +205,36 @@ public class Kiosk {
     }
 
     void cart_Add(int Key) {
-        Cart.add(FoodsCheck.get(Key));//Food
+        int num=1;
+        int price=0;
+        
+        String keyname = FoodsCheck.get(Key).getName(); //Key를 이용해 해당 key의 value의 name을 받아옴.
+        
+        if(!Cart.isEmpty()) {//Cart가 비어있지 않을때
+            Iterator <Food> it = Cart.iterator();
+            while(it.hasNext()) {
+                Food now =it.next();
+                if(now.getName().equals(keyname)){//현재 name와 파라미터 key의 name을 비교
+                    now.setNum();
+                    now.setPrice();
+                    break ;
+                }
+              
+            }
+//               Cart.add(FoodsCheck.get(Key));// Cart에 동일한 Food가 없으면 add
+            
+        }
+        else {//Cart가 비어있을때
+            Cart.add(FoodsCheck.get(Key));
+
+        }
+       
         cart_Check();
 
     }
 
     void cart_Check() {
+
         int count = 1;
         int totalprice = 0;
         int cart_menu = 0;
