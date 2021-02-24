@@ -1,7 +1,8 @@
 
 public class Food {
     private String name;
-    private String price;
+    private String price; //정가
+    private int addprice; // 총 액
     private int num;
     private String category;
 
@@ -9,17 +10,30 @@ public class Food {
         this.name = name;
         this.price = price;
         this.category = category;
+        this.addprice = Integer.parseInt(price);
         this.num = 1;
     }
 
+
+    public int getAddprice() {
+        return addprice;
+    }
+
+    public void setAddprice(int price) {
+        this.addprice += price;
+    }
+
+
     
 //-------- getter setter ----------
+
     public int getNum() {
         return num;
     }
 
-    public void setNum() {
-        this.num += 1;
+
+    public void setNum(int num) {
+        this.num += num;
     }
 
     public String getPrice() {
@@ -30,9 +44,9 @@ public class Food {
         this.price = price2;
     }
 
-    public void doublePrice() {
-        this.price += this.price;
-    }
+//    public void doublePrice() {
+//        this.price = ""+(Integer.parseInt(this.price)+Integer.parseInt(this.price));
+//    }
 
     public String getName() {
         return name;
