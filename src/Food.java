@@ -2,6 +2,16 @@
 public class Food {
     private String name;
     private String price;
+    private int addprice;
+    
+    public int getAddprice() {
+        return addprice;
+    }
+
+    public void setAddprice() {
+        this.addprice += this.addprice;
+    }
+
     private int num;
 
     private String category;
@@ -10,6 +20,7 @@ public class Food {
         this.name = name;
         this.price = price;
         this.category = category;
+        this.addprice = Integer.parseInt(price);
         this.num = 1;
     }
 
@@ -29,9 +40,9 @@ public class Food {
         this.price = price2;
     }
 
-    public void doublePrice() {
-        this.price += this.price;
-    }
+//    public void doublePrice() {
+//        this.price = ""+(Integer.parseInt(this.price)+Integer.parseInt(this.price));
+//    }
 
     public String getName() {
         return name;

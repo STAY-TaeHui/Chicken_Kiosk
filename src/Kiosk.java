@@ -55,6 +55,7 @@ public class Kiosk {
         int Choice = sc.nextInt();
         sc.nextLine();
         cart_Add(TempCart.get(Choice - 1));
+        
 
     }
 
@@ -93,6 +94,7 @@ public class Kiosk {
 
             } catch (InputMismatchException e) {
                 // TODO: handle exception
+                System.out.println("ERROR : " + e.getMessage());
                 sc = new Scanner(System.in);
                 System.out.println("올바른 숫자를 입력해주세요.");
             }
@@ -128,6 +130,7 @@ public class Kiosk {
 
                         } catch (InputMismatchException e) {
                             // TODO: handle exception
+                            System.out.println("ERROR : " + e.getMessage());
                             sc = new Scanner(System.in);
                             System.out.println("올바른 숫자를 입력해주세요.");
                         }
@@ -184,6 +187,7 @@ public class Kiosk {
             }
 
         } catch (Exception e1) {
+            e1.printStackTrace();
 
         } finally {
             try {
@@ -210,6 +214,7 @@ public class Kiosk {
                         break;
                 } catch (InputMismatchException e) {
                     // TODO: handle exception
+                    System.out.println("ERROR : " + e.getMessage());
                     sc = new Scanner(System.in);
                     System.out.println("올바른 숫자를 입력해주세요.");
 
@@ -288,24 +293,32 @@ public class Kiosk {
     }
 
     void cart_Add(int Key) {
-        int num = 1;
-        int price = 0;
+        int endcount=0;
 
         String keyname = FoodsCheck.get(Key).getName(); // Key를 이용해 해당 key의 value의 name을 받아옴.
 
         if (!Cart.isEmpty()) {// Cart가 비어있지 않을때
-            Iterator<Food> it = Cart.iterator();
-            while (it.hasNext()) {
-                Food now = it.next();
-                if (now.getName().equals(keyname)) {// 현재 name와 파라미터 key의 name을 비교
+//            Iterator<Food> it = Cart.iterator();
+//            while (it.hasNext()) {
+//                Food now = it.next();
+//                if (now.getName().equals(keyname)) {// 현재 name와 파라미터 key의 name을 비교
+//                    now.setNum();
+//                    now.doublePrice();
+//                    break;
+//                }
+//            }
+            for(int i=0; i<Cart.size(); i++) {
+                Food now = Cart.get(i);
+                if(now.getName().equals(keyname)) {
                     now.setNum();
-                    now.doublePrice();
+                    now.setAddprice();
                     break;
                 }
-
+                else if(i==Cart.size()-1) {
+                    Cart.add(FoodsCheck.get(Key));// Cart에 동일한 Food가 없으면 add
+                    break;
+                }
             }
-//               Cart.add(FoodsCheck.get(Key));// Cart에 동일한 Food가 없으면 add
-
         } else {// Cart가 비어있을때
             Cart.add(FoodsCheck.get(Key));
 
@@ -328,9 +341,9 @@ public class Kiosk {
             Iterator<Food> it = Cart.iterator();
             while (it.hasNext()) {
                 Food now = it.next();
-                System.out.println(count + ".  " + "메뉴 : " + now.getName() + "\t가격 : " + now.getPrice());
+                System.out.println(count + ".  " + "메뉴 : " + now.getName() + "\t가격 : " + now.getAddprice());
                 count++;
-                totalprice += Integer.parseInt(now.getPrice());
+                totalprice += now.getAddprice();
             }
             System.out.println();
             System.out.println("\t\t총 구매 금액 : " + totalprice);
