@@ -17,7 +17,7 @@ public class Kiosk {
     private final int BEVERAGE_CODE = 301;
     private Manager manager;
 
-    int here_togo = 0;
+    private int here_togo = 0;
     private Scanner sc;
     private Map<Integer, Food> FoodsCheck;
     private List<Food> Cart;
@@ -52,9 +52,24 @@ public class Kiosk {
             }
         }
         System.out.println("상품을 선택해주세요   Ex) 2 ");
-        int Choice = sc.nextInt();
-        sc.nextLine();
-        cart_Add(TempCart.get(Choice - 1));
+        while(true) {
+        try {
+            int Choice = sc.nextInt();
+            sc.nextLine();
+            cart_Add(TempCart.get(Choice - 1));         //상품선택시 장바구니에 넣어주는 메소드 호출
+            break;
+        } catch (IndexOutOfBoundsException e) {
+            // TODO: handle exception
+            System.out.println("ERROR : " + e.getMessage());
+            sc = new Scanner(System.in);
+            System.out.println("올바른 숫자를 입력해주세요.");
+        }
+        catch(InputMismatchException e1) {
+            System.out.println("ERROR : " + e1.getMessage());
+            sc = new Scanner(System.in);
+            System.out.println("올바른 숫자를 입력해주세요.");
+        }
+        }
         
 
     }
@@ -104,7 +119,7 @@ public class Kiosk {
         case HERE:
         case TOGO: {
             clearScreen();
-            categoryChoice(here_togo);
+            categoryChoice();
             break;
         }
         case MANAGERLOGIN: {
@@ -169,7 +184,7 @@ public class Kiosk {
     }
 
     // 카테고리 선택
-    void categoryChoice(int here_togo) {
+    void categoryChoice() {
         final int MAIN = 1;
         final int SIDE = 2;
         final int BEVERAGE = 3;
@@ -284,7 +299,7 @@ public class Kiosk {
         }
     }
 
-    void payment(int here_togo) {
+    void payment(int totalprice) {
 
     }
 
@@ -293,25 +308,15 @@ public class Kiosk {
     }
 
     void cart_Add(int Key) {
-        int endcount=0;
 
         String keyname = FoodsCheck.get(Key).getName(); // Key를 이용해 해당 key의 value의 name을 받아옴.
 
         if (!Cart.isEmpty()) {// Cart가 비어있지 않을때
-//            Iterator<Food> it = Cart.iterator();
-//            while (it.hasNext()) {
-//                Food now = it.next();
-//                if (now.getName().equals(keyname)) {// 현재 name와 파라미터 key의 name을 비교
-//                    now.setNum();
-//                    now.doublePrice();
-//                    break;
-//                }
-//            }
-            for(int i=0; i<Cart.size(); i++) {
-                Food now = Cart.get(i);
-                if(now.getName().equals(keyname)) {
-                    now.setNum();
-                    now.setAddprice();
+            for(int i=0; i<Cart.size(); i++) {      //Cart크기만큼 for문을 돌면서 Cart에 동일한 Food가 있는지 확인한다.
+                Food now = Cart.get(i);             //현재 넣을 Food
+                if(now.getName().equals(keyname)) { //Cart에 같은 이름의 Food가 있다면
+                    now.setNum();                   //setNum() >> 수량 +1;
+                    now.setAddprice();              //setAddprice() >> 기존 price에 더하기 price를 addprice에 넣어주어 해당 메뉴의 총 가격을 정해준다.
                     break;
                 }
                 else if(i==Cart.size()-1) {
@@ -341,12 +346,13 @@ public class Kiosk {
             Iterator<Food> it = Cart.iterator();
             while (it.hasNext()) {
                 Food now = it.next();
-                System.out.println(count + ".  " + "메뉴 : " + now.getName() + "\t가격 : " + now.getAddprice());
+                System.out.println(count + ".  " + "메뉴 : " + now.getName() + "\t가격 : " + now.getAddprice() + 
+                                    "\t수량 : " + now.getNum());
                 count++;
                 totalprice += now.getAddprice();
             }
             System.out.println();
-            System.out.println("\t\t총 구매 금액 : " + totalprice);
+            System.out.println("\t\t\t 총 구매 금액 : " + totalprice);
             System.out.println();
 
             loop: while (true) {
@@ -359,7 +365,7 @@ public class Kiosk {
                         switch (cart_menu) {
                         case 1: {
                             clearScreen();
-                            payment(here_togo);
+                            payment(totalprice);
                             break loop;
                         }
                         case 2: {
@@ -374,6 +380,7 @@ public class Kiosk {
                     }
                 } catch (InputMismatchException e) {
                     // TODO: handle exception
+                    System.out.println("ERROR : " + e.getMessage());
                     sc = new Scanner(System.in);
                     System.out.println("정확한 번호를 입력해주세요...");
                 }

@@ -29,7 +29,7 @@ public class Food {
     }
 
     public void setNum() {
-        this.num += 1;
+        this.num++;
     }
 
     public String getPrice() {
