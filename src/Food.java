@@ -1,8 +1,8 @@
 
 public class Food {
     private String name;
-    private String price;
-    private int addprice;
+    private String price; //정가
+    private int addprice; // 총 액
     private int num;
     private String category;
 
@@ -26,9 +26,6 @@ public class Food {
         return num;
     }
 
-    public void setNum() {
-        this.num++;
-    }
 
     public void setNum(int num) {
         this.num += num;

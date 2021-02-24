@@ -26,6 +26,7 @@ public class Kiosk {
     private BufferedReader br;
     private String Foods[];
     private int count;
+    private Receipt receipt;
 
     Kiosk() {
         sc = new Scanner(System.in);
@@ -34,6 +35,8 @@ public class Kiosk {
         Foods = new String[3];
         FoodsCheck = new HashMap<Integer, Food>();
         Cart = new ArrayList<>();
+        receipt = new Receipt();
+        
     }
 
     // 상품 확인
@@ -314,10 +317,6 @@ public class Kiosk {
 
     }
 
-    void receipt() {
-
-    }
-
     void cart_Add(int Key) {
 
         String keyname = FoodsCheck.get(Key).getName(); // Key를 이용해 해당 key의 value의 name을 받아옴.
@@ -450,8 +449,8 @@ public class Kiosk {
         return FoodsCheck;
     }
 
-    public void setFoodsCheck(Map<Integer, Food> foodsCheck) {
-        FoodsCheck = foodsCheck;
+    public List<Food> getCart() {
+        return Cart;
     }
 
     public void sleep_1sec() {      //1초 딜레이 함수
