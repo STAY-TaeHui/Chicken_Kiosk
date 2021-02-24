@@ -16,8 +16,8 @@ public class Kiosk {
     private final int SIDE_CODE = 201;
     private final int BEVERAGE_CODE = 301;
     private Manager manager;
-
-    int here_togo = 0;
+    private Buyer buyer;
+    private int here_togo = 0;
     private Scanner sc;
     private Map<Integer, Food> FoodsCheck;
     private List<Food> Cart;
@@ -30,23 +30,24 @@ public class Kiosk {
     Kiosk() {
         sc = new Scanner(System.in);
         manager = new Manager();
+        buyer = new Buyer();
         Temp = "Food.txt";
         Foods = new String[3];
         FoodsCheck = new HashMap<Integer, Food>();
         Cart = new ArrayList<>();
     }
 
-    // 상품 확인
+// ---------- 상품 확인 -------------
     void menuprint(int userChoice) {
 
         List<Integer> TempCart = new ArrayList<Integer>();
 
         String num = "" + userChoice;
         int C = 1;
-        System.out.println("번호\t상품명\t가격");
+        System.out.println("*** \t번호\t상품명\t\t가격\t ***");
         for (int i = 1; i <= FoodsCheck.size(); i++) {
             if (FoodsCheck.get(i).getCategory().equals(num)) {
-                System.out.printf("%s.\t%s\t%s원\n", C, FoodsCheck.get(i).getName(), FoodsCheck.get(i).getPrice());
+                System.out.printf("*** \t %s\t%s\t\t%s원\t ***\n", C, FoodsCheck.get(i).getName(), FoodsCheck.get(i).getPrice());
                 C++;
                 TempCart.add(i);
             }
@@ -58,14 +59,14 @@ public class Kiosk {
 
     }
 
-    // 줄 올리기
+ // ---------- 줄 올리기 -------------
     void clearScreen() {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
     }
 
-    // 메뉴선택
+ // ---------- 메뉴 선택 -------------
     public void menuChoice() {
         final int HERE = 1;
         final int TOGO = 2;
@@ -80,7 +81,6 @@ public class Kiosk {
         System.out.println("***                        ***");
         System.out.println("******************************");
         System.out.println("******************************");
-        
         while (true) {
             try {
                 here_togo = sc.nextInt();
@@ -102,77 +102,101 @@ public class Kiosk {
         case HERE:
         case TOGO: {
             clearScreen();
-            categoryChoice(here_togo);
+            categoryChoice();
             break;
         }
+     // ---------- 관리자 -------------
         case MANAGERLOGIN: {
-            if (!manager.isLogin()) {
-                System.out.println("※ 로그인을 하여야 사용 가능합니다 ※");
-                managerLogin();
-
-            } else if (manager.isLogin()) {
-                int choice = 0;
-                while (true) {
-                    System.out.println("******************************************************");
-                    System.out.println("***                 Manager Menu                   ***");
-                    System.out.println("***                                       0.로그아웃 ***");
-                    System.out.println("*** 1. 총 매출 확인  2. 전체 영수증 출력  3. 음식 가격 변경 ***");
+            while(true) {
+                if (!manager.isLogin()) {
+                    clearScreen();
+                    System.out.println("※ 로그인을 하여야 사용 가능합니다 ※");
+                    managerLogin();
+                } else if (manager.isLogin()) {
+                    int choice = 0;
                     while (true) {
-                        try {
-                            choice = sc.nextInt();
-                            sc.nextLine();
-                            if (choice != 1 && choice != 2 && choice != 3 && choice != 0) {
-                                throw new InputMismatchException();
-                            } else
-                                break;
+                        System.out.println("");
+                        System.out.println("******************************************************");
+                        System.out.println("***                 Manager Menu                   ***");
+                        System.out.println("***                                                ***");
+                        System.out.println("*** 1. 총 매출 확인  2. 전체 영수증 출력  3. 음식 가격 변경 ***");
+                        System.out.println("*** 4. 음식 추가 하기  5. 음식 삭제 하기        0.로그아웃 ***");
+                        
+                        while (true) {
+                            try {
+                                choice = sc.nextInt();
+                                sc.nextLine();
+                                if (choice != 1 && choice != 2 && choice != 3 && choice != 0
+                                        && choice != 4 && choice != 5) {
+                                    throw new InputMismatchException();
+                                } else
+                                    break;
 
-                        } catch (InputMismatchException e) {
-                            // TODO: handle exception
-                            sc = new Scanner(System.in);
-                            System.out.println("올바른 숫자를 입력해주세요.");
+                            } catch (InputMismatchException e) {
+                                // TODO: handle exception
+                                sc = new Scanner(System.in);
+                                System.out.println("올바른 숫자를 입력해주세요.");
+                            }
+                        }
+
+                     // ---------- 총 매출 확인 -------------    
+                        if (choice == 1) {
+                            manager.totalSales();
+
+                            
+                     // ---------- 전체 영수증 출력 -------------       
+                        } else if (choice == 2) {
+                            manager.receipt_Checkt();
+                                
+                    // ---------- 음식 가격 변경 -------------
+                        } else if (choice == 3) {
+                            String changeName = null;
+                            String changePrice = null;
+                            clearScreen();
+                            System.out.println("*******************************************");
+                            System.out.println("***             음식 가격 변경             ***");
+                            System.out.println("*** 변경 할 음식의 이름을 입력해주세요 ex) 피자 ***");
+                            System.out.print(">");
+                            changeName = sc.nextLine();
+                            System.out.println("변경 할 금액을 입력해주세요.");
+                            System.out.print(">");
+                            changePrice = sc.nextLine();
+
+                            manager.priceChange(changeName, changePrice);
+                            break;
+                     // ---------- 음식 추가 하기 -------------
+                        } else if (choice == 4) {
+                            clearScreen();
+                            manager.addFood();
+                            break;
+                     // ---------- 음식 삭제 하기 -------------
+                        } else if (choice == 5) {
+                            clearScreen();
+                            manager.deleteFood();
+                            break;
+                     // ---------- 로 그 아 웃 -------------
+                        } else if (choice == 0) {
+                            clearScreen();
+                            System.out.println("**********로 그 아 웃 **********");
+                            manager.setLogin(false);
+                            menuChoice();
                         }
                     }
-
-                    if (choice == 1) {
-
-                    } else if (choice == 2) {
-
-                        // 음식 가격 변경
-                    } else if (choice == 3) {
-                        String changeName = null;
-                        String changePrice = null;
-                        System.out.println("***   음식 가격 변경  ***");
-                        System.out.println("변경 할 음식의 이름을 입력해주세요  ex) 피자 ");
-                        System.out.print(">");
-                        changeName = sc.nextLine();
-                        System.out.println("변경 할 금액을 입력해주세요.");
-                        System.out.print(">");
-                        changePrice = sc.nextLine();
-
-                        manager.priceChange(changeName, changePrice);
-                        break;
-                    } else if (choice == 0) {
-                        System.out.println("**로그아웃**");
-                        manager.setLogin(false);
-                        break;
-                    }
                 }
-
             }
-
         }
-        }
-
     }
+}
 
-    // 카테고리 선택
-    void categoryChoice(int here_togo) {
+ // ---------- 카테고리 선택 -------------
+    void categoryChoice() {
         final int MAIN = 1;
         final int SIDE = 2;
         final int BEVERAGE = 3;
         final int BACK = 0;
         count = 1;
         FoodsCheck.clear();
+     // ---------- Food.txt 로드 -------------
         try {
             fr = new FileReader(Temp);
             br = new BufferedReader(fr);
@@ -182,9 +206,7 @@ public class Kiosk {
                 FoodsCheck.put(count, new Food(Foods[0], Foods[1], Foods[2]));
                 count++;
             }
-
         } catch (Exception e1) {
-
         } finally {
             try {
                 br.close();
@@ -193,17 +215,15 @@ public class Kiosk {
                 e.printStackTrace();
             }
         }
+    //--------------------------------------------
         while (true) {
-
             System.out.println("***               CATEGORY              ***");
             System.out.println("***                                     ***");
             System.out.println("***   1. 대표메뉴    2. 사이드메뉴   3. 음료  ***");
-
             int menu = 0;
             while (true) {
                 try {
                     menu = sc.nextInt();
-                    
                     if (menu != BACK && menu != MAIN && menu != SIDE && menu != BEVERAGE) {
                         throw new InputMismatchException();
                     } else
@@ -222,26 +242,26 @@ public class Kiosk {
                     return;
                 }
                 case MAIN: {
+                 // ---------- 메인 메뉴 -------------
                     clearScreen();
-
-                    System.out.println("*****   메인메뉴   *****");
-
+                    System.out.println("********************************************");
+                    System.out.println("***               메 인 메 뉴              ***");
                     menuprint(MAIN_CODE);
                     break;
                 }
                 case SIDE: {
+                 // ---------- 사이드 메뉴 -------------
                     clearScreen();
-
-                    System.out.println("*****   사이드   *****");
-
+                    System.out.println("********************************************");
+                    System.out.println("***             사 이 드 메 뉴              ***");
                     menuprint(SIDE_CODE);
                     break;
                 }
                 case BEVERAGE: {
+                 // ----------- 음료 --------------
                     clearScreen();
-
-                    System.out.println("*****   음료   *****");
-
+                    System.out.println("********************************************");
+                    System.out.println("***                 음  료                ***");
                     menuprint(BEVERAGE_CODE);
                     break;
 
@@ -250,8 +270,9 @@ public class Kiosk {
             }
         }
     }
-
+ // ---------- 관리자 로그인 -------------
     public void managerLogin() {
+        // 정규표현식
         String PATTERN_ID = "^[a-zA-Z][0-9]+{5,19}$";
         String PATTERN_PASSWORD = "^[a-zA-Z0-9][!,@,#,$,%,^,&,*,?,_,~]+{9,15}$";
 
@@ -278,15 +299,41 @@ public class Kiosk {
             return;
         }
     }
-
-    void payment(int here_togo) {
+// ---------- 결제 하기 -------------    
+    public void payment(int totalPrice) {
+        System.out.println("결제 하시겠습니까 ?");
+        System.out.println("1. 네   2. 아니요");
+        int choice = 0;
+        while(true) {
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+                if(choice != 1 && choice != 2) {
+                    throw new InputMismatchException();
+                }else{
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                sc = new Scanner(System.in);
+                System.out.println("올바른 숫자를 입력해주세요.");
+            } 
+        }
+        
+        if(choice == 1) {
+            System.out.println("결제가 완료되었습니다.");
+            System.out.println("\\t\\t총 결제 금액 : " + totalPrice);
+        }else if(choice == 2) {
+            System.out.println("취소하였습니다.");
+            return;
+        }
 
     }
-
+ // ---------- 영수증 -------------    
     void receipt() {
 
     }
 
+ // ---------- 장바구니 추가 -------------
     void cart_Add(int Key) {
         int num = 1;
         int price = 0;
@@ -304,7 +351,7 @@ public class Kiosk {
                 }
 
             }
-//               Cart.add(FoodsCheck.get(Key));// Cart에 동일한 Food가 없으면 add
+         //-- Cart.add(FoodsCheck.get(Key));// Cart에 동일한 Food가 없으면 add --
 
         } else {// Cart가 비어있을때
             Cart.add(FoodsCheck.get(Key));
@@ -315,6 +362,7 @@ public class Kiosk {
 
     }
 
+ // ---------- 장바구니 확인 -------------
     void cart_Check() {
 
         int count = 1;
@@ -346,7 +394,7 @@ public class Kiosk {
                         switch (cart_menu) {
                         case 1: {
                             clearScreen();
-                            payment(here_togo);
+                            payment(totalprice);
                             break loop;
                         }
                         case 2: {
@@ -363,15 +411,14 @@ public class Kiosk {
                     // TODO: handle exception
                     sc = new Scanner(System.in);
                     System.out.println("정확한 번호를 입력해주세요...");
-                }
-
-//            
+                } 
             }
         } else
             System.out.println("장바구니가 비어있습니다... 상품을 골라주세요");
 
     }
-
+    
+ // ---------- 장바구니 삭제 -------------
     void cart_Delete() {
         int delete_num = 0;
 
@@ -395,14 +442,4 @@ public class Kiosk {
         }
         cart_Check();
     }
-
-    // 음식 리스트 getter setter
-    public Map<Integer, Food> getFoodsCheck() {
-        return FoodsCheck;
-    }
-
-    public void setFoodsCheck(Map<Integer, Food> foodsCheck) {
-        FoodsCheck = foodsCheck;
-    }
-
 }

@@ -3,7 +3,6 @@ public class Food {
     private String name;
     private String price;
     private int num;
-
     private String category;
 
     public Food(String name, String price, String category) {
@@ -13,6 +12,8 @@ public class Food {
         this.num = 1;
     }
 
+    
+//-------- getter setter ----------
     public int getNum() {
         return num;
     }
