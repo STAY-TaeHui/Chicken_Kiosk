@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class Manager {
     private String id;
+
     private String password;
     private boolean login;
 
@@ -29,6 +30,7 @@ public class Manager {
         this.Foods = new String[3];
         this.Temp = "Food.txt";
         this.FoodsCheck = new HashMap<Integer, Food>();
+
     }
 
     public void totalSales() {
