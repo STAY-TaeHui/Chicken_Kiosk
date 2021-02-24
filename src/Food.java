@@ -14,6 +14,7 @@ public class Food {
         this.num = 1;
     }
 
+
     public int getAddprice() {
         return addprice;
     }
@@ -21,6 +22,10 @@ public class Food {
     public void setAddprice(int price) {
         this.addprice += price;
     }
+
+
+    
+//-------- getter setter ----------
 
     public int getNum() {
         return num;
