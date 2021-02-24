@@ -21,7 +21,6 @@ public class Kiosk {
     private Scanner sc;
     private Map<Integer, Food> FoodsCheck;
     private List<Food> Cart;
-    private Manager manager;
     private String Temp;
     private FileReader fr;
     private BufferedReader br;
@@ -71,25 +70,7 @@ public class Kiosk {
         final int HERE = 1;
         final int TOGO = 2;
         final int MANAGERLOGIN = 0;
-
-
-            while (true) {
-                try {
-                    here_togo = sc.nextInt();
-                    sc.nextLine();
-
-                    if (here_togo != HERE && here_togo != TOGO && here_togo != MANAGERLOGIN) {
-                        throw new InputMismatchException();
-                    } else
-                        break;
-
-                } catch (InputMismatchException e) {
-                    // TODO: handle exception
-                    sc = new Scanner(System.in);
-                    System.out.println("올바른 숫자를 입력해주세요.");
-                }
-            }
-
+        
         System.out.println("                   [관리자모드 0]");
         System.out.println("******************************");
         System.out.println("******************************");
@@ -99,6 +80,23 @@ public class Kiosk {
         System.out.println("***                        ***");
         System.out.println("******************************");
         System.out.println("******************************");
+        
+        while (true) {
+            try {
+                here_togo = sc.nextInt();
+                sc.nextLine();
+
+                if (here_togo != HERE && here_togo != TOGO && here_togo != MANAGERLOGIN) {
+                    throw new InputMismatchException();
+                } else
+                    break;
+
+            } catch (InputMismatchException e) {
+                // TODO: handle exception
+                sc = new Scanner(System.in);
+                System.out.println("올바른 숫자를 입력해주세요.");
+            }
+        }
 
         switch (here_togo) {
         case HERE:
@@ -107,60 +105,60 @@ public class Kiosk {
             categoryChoice(here_togo);
             break;
         }
-         case MANAGERLOGIN: {
-                if (!manager.isLogin()) {
-                    System.out.println("※ 로그인을 하여야 사용 가능합니다 ※");
-                    managerLogin();
-                    
-                } else if (manager.isLogin()) {
-                    int choice = 0;
+        case MANAGERLOGIN: {
+            if (!manager.isLogin()) {
+                System.out.println("※ 로그인을 하여야 사용 가능합니다 ※");
+                managerLogin();
+
+            } else if (manager.isLogin()) {
+                int choice = 0;
+                while (true) {
+                    System.out.println("******************************************************");
+                    System.out.println("***                 Manager Menu                   ***");
+                    System.out.println("***                                       0.로그아웃 ***");
+                    System.out.println("*** 1. 총 매출 확인  2. 전체 영수증 출력  3. 음식 가격 변경 ***");
                     while (true) {
-                        System.out.println("******************************************************");
-                        System.out.println("***                 Manager Menu                   ***");
-                        System.out.println("***                                       0.로그아웃 ***");
-                        System.out.println("*** 1. 총 매출 확인  2. 전체 영수증 출력  3. 음식 가격 변경 ***");
-                        while (true) {
-                            try {
-                                choice = sc.nextInt();
-                                sc.nextLine();
-                                if (choice != 1 && choice != 2 && choice != 3 && choice != 0) {
-                                    throw new InputMismatchException();
-                                } else
-                                    break;
+                        try {
+                            choice = sc.nextInt();
+                            sc.nextLine();
+                            if (choice != 1 && choice != 2 && choice != 3 && choice != 0) {
+                                throw new InputMismatchException();
+                            } else
+                                break;
 
-                            } catch (InputMismatchException e) {
-                                // TODO: handle exception
-                                sc = new Scanner(System.in);
-                                System.out.println("올바른 숫자를 입력해주세요.");
-                            }
-                        }
-
-                        if (choice == 1) {
-
-                        } else if (choice == 2) {
-
-                            // 음식 가격 변경
-                        } else if (choice == 3) {
-                            String changeName = null;
-                            String changePrice = null;
-                            System.out.println("***   음식 가격 변경  ***");
-                            System.out.println("변경 할 음식의 이름을 입력해주세요  ex) 피자 ");
-                            System.out.print(">");
-                            changeName = sc.nextLine();
-                            System.out.println("변경 할 금액을 입력해주세요.");
-                            System.out.print(">");
-                            changePrice = sc.nextLine();
-
-                            manager.priceChange(changeName, changePrice);
-                            break;
-                        } else if (choice == 0) {
-                            System.out.println("**로그아웃**");
-                            manager.setLogin(false);
-                            break;
+                        } catch (InputMismatchException e) {
+                            // TODO: handle exception
+                            sc = new Scanner(System.in);
+                            System.out.println("올바른 숫자를 입력해주세요.");
                         }
                     }
 
+                    if (choice == 1) {
+
+                    } else if (choice == 2) {
+
+                        // 음식 가격 변경
+                    } else if (choice == 3) {
+                        String changeName = null;
+                        String changePrice = null;
+                        System.out.println("***   음식 가격 변경  ***");
+                        System.out.println("변경 할 음식의 이름을 입력해주세요  ex) 피자 ");
+                        System.out.print(">");
+                        changeName = sc.nextLine();
+                        System.out.println("변경 할 금액을 입력해주세요.");
+                        System.out.print(">");
+                        changePrice = sc.nextLine();
+
+                        manager.priceChange(changeName, changePrice);
+                        break;
+                    } else if (choice == 0) {
+                        System.out.println("**로그아웃**");
+                        manager.setLogin(false);
+                        break;
+                    }
                 }
+
+            }
 
         }
         }
@@ -197,59 +195,60 @@ public class Kiosk {
         }
         while (true) {
 
+            System.out.println("***               CATEGORY              ***");
+            System.out.println("***                                     ***");
+            System.out.println("***   1. 대표메뉴    2. 사이드메뉴   3. 음료  ***");
 
-        System.out.println("***               CATEGORY              ***");
-        System.out.println("***                                     ***");
-        System.out.println("***   1. 대표메뉴    2. 사이드메뉴   3. 음료  ***");
+            int menu = 0;
+            while (true) {
+                try {
+                    menu = sc.nextInt();
+                    
+                    if (menu != BACK && menu != MAIN && menu != SIDE && menu != BEVERAGE) {
+                        throw new InputMismatchException();
+                    } else
+                        break;
+                } catch (InputMismatchException e) {
+                    // TODO: handle exception
+                    sc = new Scanner(System.in);
+                    System.out.println("올바른 숫자를 입력해주세요.");
 
-        int menu = 0;
-        while (true) {
-            try {
-                menu = sc.nextInt();
-                if (menu != BACK && menu != MAIN && menu != SIDE && menu != BEVERAGE) {
-                    throw new InputMismatchException();
-                } else
+                }
+            }
+
+                switch (menu) {
+                case BACK: {
+                    clearScreen();
+                    return;
+                }
+                case MAIN: {
+                    clearScreen();
+
+                    System.out.println("*****   메인메뉴   *****");
+
+                    menuprint(MAIN_CODE);
                     break;
-            } catch (InputMismatchException e) {
-                // TODO: handle exception
-                sc = new Scanner(System.in);
-                System.out.println("올바른 숫자를 입력해주세요.");
+                }
+                case SIDE: {
+                    clearScreen();
 
-            }
+                    System.out.println("*****   사이드   *****");
 
-            switch (menu) {
-            case BACK: {
-                clearScreen();
-                return;
-            }
-            case MAIN: {
-                clearScreen();
+                    menuprint(SIDE_CODE);
+                    break;
+                }
+                case BEVERAGE: {
+                    clearScreen();
 
-                System.out.println("*****   메인메뉴   *****");
+                    System.out.println("*****   음료   *****");
 
-                menuprint(MAIN_CODE);
-                break;
-            }
-            case SIDE: {
-                clearScreen();
+                    menuprint(BEVERAGE_CODE);
+                    break;
 
-                System.out.println("*****   사이드   *****");
-
-                menuprint(SIDE_CODE);
-                break;
-            }
-            case BEVERAGE: {
-                clearScreen();
-
-                System.out.println("*****   음료   *****");
-
-                menuprint(BEVERAGE_CODE);
-                break;
-
-            }
+                }
+                
             }
         }
-
     }
 
     public void managerLogin() {
@@ -267,9 +266,6 @@ public class Kiosk {
 
             System.out.print("PW : ");
             String password = sc.nextLine();
-            if (password.equals("0")) {
-                break;
-            }
             while (!Pattern.matches(PATTERN_PASSWORD, password) && !(manager.getPassword().equals(password))) {
                 System.out.println("PW를 잘못입력 하셨습니다");
                 System.out.print("PW : ");
@@ -279,7 +275,7 @@ public class Kiosk {
 
             manager.setLogin(true);
             System.out.println("로그인이 성공!!");
-            break;
+            return;
         }
     }
 
@@ -292,30 +288,29 @@ public class Kiosk {
     }
 
     void cart_Add(int Key) {
-        int num=1;
-        int price=0;
-        
-        String keyname = FoodsCheck.get(Key).getName(); //Key를 이용해 해당 key의 value의 name을 받아옴.
-        
-        if(!Cart.isEmpty()) {//Cart가 비어있지 않을때
-            Iterator <Food> it = Cart.iterator();
-            while(it.hasNext()) {
-                Food now =it.next();
-                if(now.getName().equals(keyname)){//현재 name와 파라미터 key의 name을 비교
+        int num = 1;
+        int price = 0;
+
+        String keyname = FoodsCheck.get(Key).getName(); // Key를 이용해 해당 key의 value의 name을 받아옴.
+
+        if (!Cart.isEmpty()) {// Cart가 비어있지 않을때
+            Iterator<Food> it = Cart.iterator();
+            while (it.hasNext()) {
+                Food now = it.next();
+                if (now.getName().equals(keyname)) {// 현재 name와 파라미터 key의 name을 비교
                     now.setNum();
-                    now.setPrice();
-                    break ;
+                    now.doublePrice();
+                    break;
                 }
-              
+
             }
 //               Cart.add(FoodsCheck.get(Key));// Cart에 동일한 Food가 없으면 add
-            
-        }
-        else {//Cart가 비어있을때
+
+        } else {// Cart가 비어있을때
             Cart.add(FoodsCheck.get(Key));
 
         }
-       
+
         cart_Check();
 
     }
