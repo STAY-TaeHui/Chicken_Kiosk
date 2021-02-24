@@ -3,17 +3,7 @@ public class Food {
     private String name;
     private String price;
     private int addprice;
-    
-    public int getAddprice() {
-        return addprice;
-    }
-
-    public void setAddprice() {
-        this.addprice += this.addprice;
-    }
-
     private int num;
-
     private String category;
 
     public Food(String name, String price, String category) {
@@ -24,12 +14,24 @@ public class Food {
         this.num = 1;
     }
 
+    public int getAddprice() {
+        return addprice;
+    }
+
+    public void setAddprice(int price) {
+        this.addprice += price;
+    }
+
     public int getNum() {
         return num;
     }
 
     public void setNum() {
         this.num++;
+    }
+
+    public void setNum(int num) {
+        this.num += num;
     }
 
     public String getPrice() {
