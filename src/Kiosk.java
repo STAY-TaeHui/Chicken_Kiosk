@@ -15,7 +15,7 @@ public class Kiosk {
     private final int SIDE_CODE = 201;
     private final int BEVERAGE_CODE = 301;
     private Manager manager;
-    
+
     private Scanner sc;
     private Map<Integer, Food> FoodsCheck;
     private List<Map<Integer, Food>> Cart;
@@ -24,6 +24,7 @@ public class Kiosk {
     private BufferedReader br;
     private String Foods[];
     private int count;
+
     Kiosk() {
         sc = new Scanner(System.in);
         manager = new Manager();
@@ -31,10 +32,9 @@ public class Kiosk {
         Foods = new String[3];
         FoodsCheck = new HashMap<Integer, Food>();
         Cart = new ArrayList<Map<Integer, Food>>();
-        
+
     }
 
-    
     // 상품 확인
     void menuprint(int userChoice) {
         List<Integer> TempCart = new ArrayList<Integer>();
@@ -55,13 +55,14 @@ public class Kiosk {
         cart_Add(TempCart.get(Choice - 1));
 
     }
+
     // 줄 올리기
     void clearScreen() {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
     }
-    
+
     // 메뉴선택
     public void menuChoice() {
         final int HERE = 1;
@@ -84,7 +85,7 @@ public class Kiosk {
                 try {
                     here_togo = sc.nextInt();
                     sc.nextLine();
-                    
+
                     if (here_togo != HERE && here_togo != TOGO && here_togo != MANAGERLOGIN) {
                         throw new InputMismatchException();
                     } else
@@ -109,13 +110,13 @@ public class Kiosk {
                 break;
             }
             case MANAGERLOGIN: {
-                managerLogin();
-                if(!manager.isLogin()) {
+                if (!manager.isLogin()) {
                     System.out.println("※ 로그인을 하여야 사용 가능합니다 ※");
-                    break;
-                }else if(manager.isLogin()) {
+                    managerLogin();
+                    
+                } else if (manager.isLogin()) {
                     int choice = 0;
-                    while(true) {
+                    while (true) {
                         System.out.println("******************************************************");
                         System.out.println("***                 Manager Menu                   ***");
                         System.out.println("***                                       0.로그아웃 ***");
@@ -136,16 +137,12 @@ public class Kiosk {
                             }
                         }
 
-                        if(choice == 1) {
-                            
-                        }else if(choice == 2) {
-                         
-                            
-                            
-                            
-                            
-                        // 음식 가격 변경
-                        }else if(choice == 3) {
+                        if (choice == 1) {
+
+                        } else if (choice == 2) {
+
+                            // 음식 가격 변경
+                        } else if (choice == 3) {
                             String changeName = null;
                             String changePrice = null;
                             System.out.println("***   음식 가격 변경  ***");
@@ -158,7 +155,7 @@ public class Kiosk {
 
                             manager.priceChange(changeName, changePrice);
                             break;
-                        }else if(choice == 0) {
+                        } else if (choice == 0) {
                             System.out.println("**로그아웃**");
                             manager.setLogin(false);
                             break;
@@ -172,6 +169,7 @@ public class Kiosk {
 
         }
     }
+
     // 카테고리 선택
     void categoryChoice(int here_togo) {
         final int MAIN = 1;
@@ -221,29 +219,29 @@ public class Kiosk {
         }
 
         switch (menu) {
-            case BACK: {
-                clearScreen();
-                return;
-            }
-            case MAIN: {
-                System.out.println("*****   메인메뉴   *****");
-    
-                menuprint(MAIN_CODE);
-                break;
-            }
-            case SIDE: {
-                System.out.println("*****   사이드   *****");
-    
-                menuprint(SIDE_CODE);
-                break;
-            }
-            case BEVERAGE: {
-                System.out.println("*****   음료   *****");
-    
-                menuprint(BEVERAGE_CODE);
-                break;
-    
-            }           
+        case BACK: {
+            clearScreen();
+            return;
+        }
+        case MAIN: {
+            System.out.println("*****   메인메뉴   *****");
+
+            menuprint(MAIN_CODE);
+            break;
+        }
+        case SIDE: {
+            System.out.println("*****   사이드   *****");
+
+            menuprint(SIDE_CODE);
+            break;
+        }
+        case BEVERAGE: {
+            System.out.println("*****   음료   *****");
+
+            menuprint(BEVERAGE_CODE);
+            break;
+
+        }
         }
 
     }
@@ -255,27 +253,27 @@ public class Kiosk {
         while (true) {
             System.out.print("ID : ");
             String id = sc.nextLine();
-            while(!Pattern.matches(PATTERN_ID, id) && !(manager.getId().equals(id))) {
+            while (!Pattern.matches(PATTERN_ID, id) && !(manager.getId().equals(id))) {
                 System.out.println("잘못입력 하셨습니다");
                 System.out.print("ID : ");
                 id = sc.nextLine();
             }
-            
+
             System.out.print("PW : ");
             String password = sc.nextLine();
-            if(password.equals("0")) {
+            if (password.equals("0")) {
                 break;
             }
-            while(!Pattern.matches(PATTERN_PASSWORD, password) && !(manager.getPassword().equals(password))) {
+            while (!Pattern.matches(PATTERN_PASSWORD, password) && !(manager.getPassword().equals(password))) {
                 System.out.println("PW를 잘못입력 하셨습니다");
                 System.out.print("PW : ");
                 password = sc.nextLine();
-                
+
             }
 
             manager.setLogin(true);
-       System.out.println("로그인이 성공!!");
-       break;
+            System.out.println("로그인이 성공!!");
+            break;
         }
     }
 
@@ -298,8 +296,7 @@ public class Kiosk {
     void cart_Delete() {
 
     }
-    
-    
+
     // 음식 리스트 getter setter
     public Map<Integer, Food> getFoodsCheck() {
         return FoodsCheck;
