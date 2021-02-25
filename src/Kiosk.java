@@ -16,7 +16,6 @@ public class Kiosk {
     private final int SIDE_CODE = 201;
     private final int BEVERAGE_CODE = 301;
     private Manager manager;
-    private Buyer buyer;
     private int here_togo = 0;
     private Scanner sc;
     private Map<Integer, Food> FoodsCheck;
@@ -26,22 +25,15 @@ public class Kiosk {
     private BufferedReader br;
     private String Foods[];
     private int count;
-    private Receipt receipt; // 방법 2. Cart 를 while 돌면서 정보를 receipt로 보내기
-    private Receipt2 receipt2;// 방법 1. receipt에 Cart를 보내기
-    private int ordernum;
     private boolean pay_complete; //결제 완료 true or fasle
 
     Kiosk() {
         sc = new Scanner(System.in);
         manager = new Manager();
-        buyer = new Buyer();
         Temp = "Food.txt";
         Foods = new String[3];
         FoodsCheck = new HashMap<Integer, Food>();
         Cart = new ArrayList<>();
-        receipt = new Receipt();
-        receipt2 = new Receipt2();
-        ordernum = 1;
 
     }
 
@@ -105,7 +97,7 @@ public class Kiosk {
         
         
 
-        HEREORTOGO: while (true) {
+       while (true) {
             this.pay_complete=false;
 
             System.out.println("                   [관리자모드 0]");
@@ -118,7 +110,7 @@ public class Kiosk {
             System.out.println("******************************");
             System.out.println("******************************");
 
-            menu_case: while (true) {
+            while (true) {
                 try {
                     here_togo = sc.nextInt();
                     sc.nextLine();
