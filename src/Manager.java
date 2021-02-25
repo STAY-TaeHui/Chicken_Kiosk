@@ -33,7 +33,7 @@ public class Manager {
     public Manager() {
         this.id = "admin1234";
         this.password = "a123456!";
-        this.login = true;
+        this.login = false;
         this.count = 1;
         this.Foods = new String[3];
         this.Temp = "Food.txt";
@@ -93,7 +93,7 @@ public class Manager {
                     System.out.println(data);
                 }   
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println("출력할 영수증이 없습니다.");
             } finally {
                 try {
                     br.close();

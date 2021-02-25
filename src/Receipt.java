@@ -64,12 +64,14 @@ public class Receipt {
             // ----------------장바구니 확인-------------------------
             int count = 1;
             int totalprice = 0;
+            String data = null;
             Iterator<Food> it = cart.iterator();
             while (it.hasNext()) {
             Food now = it.next();
-            
-            bw.write("=  \t " + count + "\t\t" + now.getName() + " ");
-            bw.write("\t" + now.getAddprice() + "\t " + now.getNum() + "\t =\n");
+            data = "=  \t " + count + "\t\t" + now.getName() + "\t" + now.getAddprice() + "\t " + now.getNum() + "\t =\n";
+            bw.write(data);
+           // bw.write("=  \t " + count + "\t\t" + now.getName() + " ");
+           // bw.write("\t" + now.getAddprice() + "\t " + now.getNum() + "\t =\n");
             count++;
             totalprice += now.getAddprice();
             }
