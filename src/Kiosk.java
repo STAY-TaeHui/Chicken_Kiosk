@@ -11,13 +11,11 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Kiosk {
-
     private final int MAIN_CODE = 101;
     private final int SIDE_CODE = 201;
     private final int BEVERAGE_CODE = 301;
     private Manager manager;
-    private Buyer buyer;
-    private int here_togo = 0;
+    private int here_togo = 1;
     private Scanner sc;
     private Map<Integer, Food> FoodsCheck;
     private List<Food> Cart;
@@ -27,17 +25,16 @@ public class Kiosk {
     private String Foods[];
     private int count;
     private Receipt receipt;
-
+    private int discount;
+    private boolean pay_complement;
     Kiosk() {
         sc = new Scanner(System.in);
         manager = new Manager();
-        buyer = new Buyer();
         Temp = "Food.txt";
         Foods = new String[3];
         FoodsCheck = new HashMap<Integer, Food>();
         Cart = new ArrayList<>();
         receipt = new Receipt();
-        
     }
 
 // ---------- 상품 확인 -------------
@@ -92,134 +89,133 @@ public class Kiosk {
     }
 
  // ---------- 메뉴 선택 -------------
-    public void menuChoice() {
-        final int HERE = 1;
-        final int TOGO = 2;
-        final int MANAGERLOGIN = 0;
+ public void menuChoice() {
 
-        System.out.println("                   [관리자모드 0]");
-        System.out.println("******************************");
-        System.out.println("******************************");
-        System.out.println("***                        ***");
-        System.out.println("***      CHICKEN KIOSK     ***");
-        System.out.println("***    1. 매장      2. 포장  ***");
-        System.out.println("***                        ***");
-        System.out.println("******************************");
-        System.out.println("******************************");
-
-        while (true) {
-            try {
-                here_togo = sc.nextInt();
-                sc.nextLine();
-
-                if (here_togo != HERE && here_togo != TOGO && here_togo != MANAGERLOGIN) {
-                    throw new InputMismatchException();
-                } else
-                    break;
-
-            } catch (InputMismatchException e) {
-                // TODO: handle exception
-                System.out.println("ERROR : " + e.getMessage());
-                sc = new Scanner(System.in);
-                System.out.println("올바른 숫자를 입력해주세요.");
-                sleep_1sec();
-            }
-        }
-
-        switch (here_togo) {
-        case HERE:
-        case TOGO: {
-            clearScreen();
-            categoryChoice();
-            break;
-        }
-     // ---------- 관리자 -------------
-        case MANAGERLOGIN: {
-            while(true) {
-                if (!manager.isLogin()) {
-                    clearScreen();
-                    System.out.println("※ 로그인을 하여야 사용 가능합니다 ※");
-                    managerLogin();
-                } else if (manager.isLogin()) {
-                    int choice = 0;
-                    while (true) {
-
-                        
-
-                        System.out.println("");
-                        System.out.println("******************************************************");
-                        System.out.println("***                 Manager Menu                   ***");
-                        System.out.println("***                                                ***");
-                        System.out.println("*** 1. 총 매출 확인  2. 전체 영수증 출력  3. 음식 가격 변경 ***");
-                        System.out.println("*** 4. 음식 추가 하기  5. 음식 삭제 하기        0.로그아웃 ***");
-                        
-                        while (true) {
-                            try {
-                                choice = sc.nextInt();
-                                sc.nextLine();
-                                if (choice != 1 && choice != 2 && choice != 3 && choice != 0
-                                        && choice != 4 && choice != 5) {
-                                    throw new InputMismatchException();
-                                } else
-                                    break;
-
-                            } catch (InputMismatchException e) {
-                            // TODO: handle exception
-                            System.out.println("ERROR : " + e.getMessage());
-                            sc = new Scanner(System.in);
-                            System.out.println("올바른 숫자를 입력해주세요.");
-                            }
-                        }
-
-                     // ---------- 총 매출 확인 -------------    
-                        if (choice == 1) {
-                            manager.totalSales();
-
-                            
-                     // ---------- 전체 영수증 출력 -------------       
-                        } else if (choice == 2) {
-                            manager.receipt_Checkt();
-                                
-                    // ---------- 음식 가격 변경 -------------
-                        } else if (choice == 3) {
-                            String changeName = null;
-                            String changePrice = null;
-                            clearScreen();
-                            System.out.println("*******************************************");
-                            System.out.println("***             음식 가격 변경             ***");
-                            System.out.println("*** 변경 할 음식의 이름을 입력해주세요 ex) 피자 ***");
-                            System.out.print(">");
-                            changeName = sc.nextLine();
-                            System.out.println("변경 할 금액을 입력해주세요.");
-                            System.out.print(">");
-                            changePrice = sc.nextLine();
-
-                            manager.priceChange(changeName, changePrice);
-                            break;
-                     // ---------- 음식 추가 하기 -------------
-                        } else if (choice == 4) {
-                            clearScreen();
-                            manager.addFood();
-                            break;
-                     // ---------- 음식 삭제 하기 -------------
-                        } else if (choice == 5) {
-                            clearScreen();
-                            manager.deleteFood();
-                            break;
-                     // ---------- 로 그 아 웃 -------------
-                        } else if (choice == 0) {
-                            clearScreen();
-                            System.out.println("**********로 그 아 웃 **********");
-                            manager.setLogin(false);
-                            menuChoice();
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
+     final int HERE = 1;
+     final int TOGO = 2;
+     final int MANAGERLOGIN = 0;
+     while (true) {
+             pay_complement = false;
+             System.out.println("                   [관리자모드 0]");
+             System.out.println("******************************");
+             System.out.println("******************************");
+             System.out.println("***                        ***");
+             System.out.println("***      CHICKEN KIOSK     ***");
+             System.out.println("***    1. 매장      2. 포장  ***");
+             System.out.println("***                        ***");
+             System.out.println("******************************");
+             System.out.println("******************************");
+    
+             while (true) {
+                 try {
+                     here_togo = sc.nextInt();
+                     sc.nextLine();
+    
+                     if (here_togo != HERE && here_togo != TOGO && here_togo != MANAGERLOGIN) {
+                         throw new InputMismatchException();
+                     } else
+                         break;
+    
+                 } catch (InputMismatchException e) {
+                     // TODO: handle exception
+                     System.out.println("ERROR : " + e.getMessage());
+                     sc = new Scanner(System.in);
+                     System.out.println("올바른 숫자를 입력해주세요.");
+                     sleep_1sec();
+                 }
+             }
+    
+             switch (here_togo) {
+             case HERE:
+             case TOGO: {
+                 clearScreen();
+                 categoryChoice();
+                 break;
+             }
+             // ---------- 관리자 -------------
+             case MANAGERLOGIN: {
+                 while (true) {
+                     if (!manager.isLogin()) {
+                         clearScreen();
+                         System.out.println("※ 로그인을 하여야 사용 가능합니다 ※");
+                         managerLogin();
+                     } else if (manager.isLogin()) {
+                         int choice = 0;
+                         while (true) {
+    
+                             System.out.println("");
+                             System.out.println("******************************************************");
+                             System.out.println("***                 Manager Menu                   ***");
+                             System.out.println("***                                                ***");
+                             System.out.println("*** 1. 총 매출 확인  2. 전체 영수증 출력  3. 음식 가격 변경 ***");
+                             System.out.println("*** 4. 음식 추가 하기  5. 음식 삭제 하기        0.로그아웃 ***");
+    
+                             while (true) {
+                                 try {
+                                     choice = sc.nextInt();
+                                     sc.nextLine();
+                                     if (choice != 1 && choice != 2 && choice != 3 && choice != 0 && choice != 4
+                                             && choice != 5) {
+                                         throw new InputMismatchException();
+                                     } else
+                                         break;
+    
+                                 } catch (InputMismatchException e) {
+                                     // TODO: handle exception
+                                     System.out.println("ERROR : " + e.getMessage());
+                                     sc = new Scanner(System.in);
+                                     System.out.println("올바른 숫자를 입력해주세요.");
+                                 }
+                             }
+    
+                             // ---------- 총 매출 확인 -------------
+                             if (choice == 1) {
+                                 manager.totalSales();
+    
+                                 // ---------- 전체 영수증 출력 -------------
+                             } else if (choice == 2) {
+                                 manager.receipt_Checkt();
+    
+                                 // ---------- 음식 가격 변경 -------------
+                             } else if (choice == 3) {
+                                 String changeName = null;
+                                 String changePrice = null;
+                                 clearScreen();
+                                 System.out.println("*******************************************");
+                                 System.out.println("***             음식 가격 변경             ***");
+                                 System.out.println("*** 변경 할 음식의 이름을 입력해주세요 ex) 피자 ***");
+                                 System.out.print(">");
+                                 changeName = sc.nextLine();
+                                 System.out.println("변경 할 금액을 입력해주세요.");
+                                 System.out.print(">");
+                                 changePrice = sc.nextLine();
+    
+                                 manager.priceChange(changeName, changePrice);
+                                 break;
+                                 // ---------- 음식 추가 하기 -------------
+                             } else if (choice == 4) {
+                                 clearScreen();
+                                 manager.addFood();
+                                 break;
+                                 // ---------- 음식 삭제 하기 -------------
+                             } else if (choice == 5) {
+                                 clearScreen();
+                                 manager.deleteFood();
+                                 break;
+                                 // ---------- 로 그 아 웃 -------------
+                             } else if (choice == 0) {
+                                 clearScreen();
+                                 System.out.println("**********로 그 아 웃 **********");
+                                 manager.setLogin(false);
+                                 menuChoice();
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+     }
+ }
 
  // ---------- 카테고리 선택 -------------
     void categoryChoice() {
@@ -252,12 +248,10 @@ public class Kiosk {
             }
         }
     //--------------------------------------------
-        while (true) {
-
-            clearScreen();
+        while (!pay_complement) {
             System.out.println("***               CATEGORY              ***");
             System.out.println("***                                     ***");
-            System.out.println("***   1. 대표메뉴    2. 사이드메뉴   3. 음료   ***");
+            System.out.println("***   1. 대표메뉴    2. 사이드메뉴   3. 음료  ***");
             System.out.println("***                                     ***");
             System.out.println("-------     [0] 장바구니 확인 및 결제     -------");
 
@@ -285,7 +279,8 @@ public class Kiosk {
                 switch (menu) {
                 case CART_PAY: {
                 clearScreen();
-                System.out.println("*****   장바구니   *****");
+                System.out.println("***************************************************");
+                System.out.println("***                 장 바 구 니                   ***");
                 cart_Check();
                 break;
             }
@@ -312,11 +307,10 @@ public class Kiosk {
                     System.out.println("***                 음  료                ***");
                     menuprint(BEVERAGE_CODE);
                     break;
-
-
             }
         }
     }
+}
  // ---------- 관리자 로그인 -------------
     public void managerLogin() {
         // 정규표현식
@@ -368,19 +362,34 @@ public class Kiosk {
         }
         
         if(choice == 1) {
-            System.out.println("결제가 완료되었습니다.");
-            System.out.println("\\t\\t총 결제 금액 : " + totalPrice);
+            if(here_togo == 1) {
+                System.out.println("결제가 완료되었습니다.");
+                System.out.println("\t\t총 결제 금액 : " + totalPrice);
+                receipt.receiptWrite(Cart, discount,totalPrice); // 사용자 영수증
+                receipt.addreceiptWrite(Cart, discount,totalPrice); // 관리자 영수증
+            }else if(here_togo == 2) {
+                // 포장시 3000원 할인
+                System.out.println("결제가 완료되었습니다.");
+                if(totalPrice >= 10000) {
+                    this.discount = 3000;
+                    totalPrice -= discount;
+                    System.out.println("포장을 하여 3000원 할인됩니다.");
+                }else {
+                    System.out.println("포장할인은 10000원 이상 구매시 할인 됩니다.");
+                }
+                System.out.println("\t\t총 결제 금액 : " + totalPrice + "원");
+                receipt.receiptWrite(Cart, discount,totalPrice); // 사용자 영수증
+                receipt.addreceiptWrite(Cart, discount,totalPrice); // 관리자 영수증
+            }
+            Cart.clear();
+            pay_complement = true;
         }else if(choice == 2) {
             System.out.println("취소하였습니다.");
             return;
         }
 
     }
- // ---------- 영수증 -------------    
-    void receipt() {
-
-    }
-
+ 
  // ---------- 장바구니 추가 -------------
     void cart_Add(int Key) {
 
@@ -407,7 +416,7 @@ public class Kiosk {
         System.out.println("메뉴선택으로 돌아갑니다...");
 
         sleep_1sec();
-
+        clearScreen();
     }
 
  // ---------- 장바구니 확인 -------------
@@ -419,17 +428,17 @@ public class Kiosk {
             loop: while (true) {
                 int count = 1;
                 int totalprice = 0;
-
+                
+                System.out.println("***\t번호\t상품명\t\t가격\t수량\t***");
                 Iterator<Food> it = Cart.iterator();
                 while (it.hasNext()) {
                     Food now = it.next();
-                    System.out.println(count + ".  " + "메뉴 : " + now.getName() + "\t가격 : " + now.getAddprice()
-                            + "\t수량 : " + now.getNum());
+                    System.out.println("***  \t" + count + "\t" + now.getName() + "\t\t" + now.getAddprice() + "\t " + now.getNum() + "\t***");
                     count++;
                     totalprice += now.getAddprice();
                 }
-                System.out.println();
-                System.out.println("\t\t\t 총 구매 금액 : " + totalprice);
+                System.out.println("***\t\t\t\t\t\t***");
+                System.out.println("\t\t\t 총 구매 금액 : " + totalprice +"원");
                 System.out.println();
 
                 System.out.println("1. 결제하기\t 2. 장바구니 상품 삭제\t 3. 계속 쇼핑하기");
@@ -468,7 +477,10 @@ public class Kiosk {
                     break;
                 }
             }
-
+        }else {
+            System.out.println("장바구니가 비어있습니다... 상품을 골라주세요");
+            sleep_1sec();
+        }
     }
     
  // ---------- 장바구니 삭제 -------------
@@ -486,10 +498,12 @@ public class Kiosk {
                         now.setAddprice(Integer.parseInt(now.getPrice()) * -1);
                         System.out.printf("선택한 [ %s ]의 갯수를 하나 줄였습니다!!!\n\n",now.getName());
                         sleep_1sec();
+                        clearScreen();
                     } else {
                         Cart.remove(delete_num - 1);
                         System.out.printf("선택한 [ %s ]을(를) 제거했습니다..\n\n",now.getName());
                         sleep_1sec();
+                        clearScreen();
                     }
                     break;
                 } else {
@@ -517,7 +531,8 @@ public class Kiosk {
         return Cart;
     }
 
-    public void sleep_1sec() {      //1초 딜레이 함수
+    // 1초 딜레이 함수
+    public void sleep_1sec() {      
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
