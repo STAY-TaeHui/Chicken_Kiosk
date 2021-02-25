@@ -3,7 +3,7 @@ public class Food {
     private String name;
     private String price; //정가
     private int addprice; // 총 액
-    private int num;
+    private int num; // 수량
     private String category;
 
     public Food(String name, String price, String category) {
