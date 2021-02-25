@@ -72,8 +72,9 @@ public class Manager {
                 }
             }
         }
-    }
-*/
+ */   
+        }
+
 //-------------- 전체 영수증 출력 --------------------//    
     public void receipt_Checkt() {
 /*        if (login == true) {
@@ -99,8 +100,9 @@ public class Manager {
                 }
             }
         }
-    }
-*/
+   */ 
+        }
+
 //-------------- 음식 가격 변경 --------------------//    
     public void priceChange(String name, String price) {
         FoodCheck();
