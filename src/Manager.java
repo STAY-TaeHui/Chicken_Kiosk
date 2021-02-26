@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,42 +25,48 @@ public class Manager {
     private BufferedReader br;
     private String Foods[];
     private int count;
-    private String path;
+    private String TotalSalse;
+    private String AddReceipt;
+    private File receipt;
+
     
     public Manager() {
         this.id = "admin1234";
         this.password = "a123456!";
-        this.login = true;
+        this.login = false;
         this.count = 1;
         this.Foods = new String[3];
         this.Temp = "Food.txt";
         this.FoodsCheck = new HashMap<Integer, Food>();
         this.sc = new Scanner(System.in);
-        this.path = "영수증 경로 정해줘야함";
+        this.TotalSalse = "TotalSalse.txt";
+        this.AddReceipt = "AddReceipt.txt";
+
+        
     }
 
 //-------------- 총 매출 확인 --------------------//    
     public void totalSales() {
- /*       if (login == true) {
+        this.receipt = new File(TotalSalse);
+        if (login == true) {
             try {
                 // receipt.createNewFile();
-                fr = new FileReader(path);
+                fr = new FileReader(TotalSalse);
                 br = new BufferedReader(fr);
 
-                if (path.exists()) {
+                if (receipt.exists()) {
                     String line = null;
                     int sum = 0;
+                    String[] line2 = new String[1];
                     while ((line = br.readLine()) != null) {
-                        String[] line2 = line.split(" ");
-                        // for(int i=0; i<line2.length; i++) {
+                        line2 = line.split(",");
                         int resprice = Integer.parseInt(line2[1]);
-                        System.out.println(resprice);
-                        // System.out.println(line2[i]);
                         sum += resprice;
-
-                        // }
                     }
-                    System.out.println("Today total> " + sum);
+                    System.out.println("******************************************************");
+                    System.out.println("***               Todat TotalSales                 ***");
+                    System.out.println("***                   "  +  sum    + "원\t\t\t   ***");
+                
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -72,25 +79,23 @@ public class Manager {
                 }
             }
         }
- */   
+
         }
+
 
 //-------------- 전체 영수증 출력 --------------------//    
     public void receipt_Checkt() {
-/*        if (login == true) {
+        this.receipt = new File(AddReceipt);
+        if (login == true) {
             try {
-                fr = new FileReader(path);
+                fr = new FileReader(AddReceipt);
                 br = new BufferedReader(fr);
-                while (true) {
-                    if (br.exists()) {
-                        String line = br.readLine();
-                        if (line == null)
-                            break;
-                        System.out.println(line);
-                    }
-                }
+                String data = null;
+                while ((data = br.readLine()) != null) {
+                    System.out.println(data);
+                }   
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println("출력할 영수증이 없습니다.");
             } finally {
                 try {
                     br.close();
@@ -100,8 +105,9 @@ public class Manager {
                 }
             }
         }
-   */ 
+
         }
+
 
 //-------------- 음식 가격 변경 --------------------//    
     public void priceChange(String name, String price) {
@@ -149,7 +155,7 @@ public class Manager {
 
     }
 
-    // -------------- 음식 추가 --------------------//
+// -------------- 음식 추가 --------------------//
     public void addFood() {
         int choice = 0;
         String categoryName = null;
@@ -225,7 +231,7 @@ public class Manager {
 
     }
 
-    // -------------- 음식 삭제 --------------------//
+// -------------- 음식 삭제 --------------------//
     public void deleteFood() {
         FoodCheck();
         String category = null;
